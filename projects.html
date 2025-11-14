@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Projekty — Dawid Bujnowicz</title>
+  <link rel="stylesheet" href="projekt.css" />
+</head>
+<body>
+  <!-- Header (kopiuj) -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">DB<span class="dot">.</span></a>
+      <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="Otwórz menu">
+        <span class="hamburger"></span>
+      </button>
+      <nav id="primary-nav" class="primary-nav">
+        <ul>
+          <li><a href="index.html">Start</a></li>
+          <li><a href="about.html">O mnie</a></li>
+          <li><a href="projects.html" class="active">Projekty</a></li>
+          <li><a href="contact.html">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Projekty</h1>
+    <p>Lista projektów / wpisów — kliknij, aby zobaczyć szczegóły.</p>
+    <div class="grid">
+    
+      <article class="project-tile">
+        <img src="oshee-isotonic-drink-witaminy-i-mineraly-750ml-zestaw-6-sztuk.webp" alt="Projekt 1"/>
+        <h3>Projekt A</h3>
+        <p>oshee.</p>
+      </article>
+
+      <article class="project-tile">
+        <img src="images.jpg" alt="Projekt 2"/>
+        <h3>Projekt B</h3>
+        <p>park.</p>
+      </article>
+
+      <article class="project-tile">
+        <img src="il_570xN.4260125177_bk6k.webp" alt="Projekt 3"/>
+        <h3>Projekt C</h3>
+        <p>zdjecia.</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2025 Dawid Bujnowicz</p>
+      <nav class="footer-nav">
+        <a href="index.html">Start</a> · <a href="about.html">O mnie</a> · <a href="projects.html">Projekty</a> · <a href="contact.html">Kontakt</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- KONIEC treści BODY -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ===== MENU HAMBURGER =====
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.primary-nav');
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      const opened = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', opened);
+    });
+
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', false);
+        }
+      });
+    });
+  }
+
+  // ===== FORMULARZ KONTAKTOWY =====
+  const form = document.getElementById('contactForm');
+  const msgBox = document.getElementById('formMessage');
+
+  if (form && msgBox) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+
+      if (!name || name.length < 2) return showMsg('Podaj poprawne imię (min 2 znaki)', true);
+      if (!email || !/^\S+@\S+\.\S+$/.test(email)) return showMsg('Podaj poprawny email', true);
+      if (!message || message.length < 10) return showMsg('Wiadomość min 10 znaków', true);
+
+      const submissions = JSON.parse(localStorage.getItem('submissions') || '[]');
+      submissions.push({name, email, message, date: new Date().toISOString()});
+      localStorage.setItem('submissions', JSON.stringify(submissions));
+
+      form.reset();
+      showMsg('Wysłano wiadomość (demo, zapisane lokalnie).', false);
+    });
+
+    function showMsg(text, isError) {
+      msgBox.textContent = text;
+      msgBox.style.color = isError ? '#ff6b6b' : '#a8ffbf';
+      setTimeout(() => { msgBox.textContent = ''; }, 5000);
+    }
+  }
+
+  // ===== ANIMACJA REVEAL =====
+  const reveals = document.querySelectorAll('.reveal');
+  if (reveals.length) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.15 });
+
+    reveals.forEach(el => observer.observe(el));
+  }
+
+});
+</script>
+</body>
+
+</body>
+</html>
