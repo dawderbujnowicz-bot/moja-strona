@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Moje Portfolio — Dawid Bujnowicz</title>
+  <meta name="description" content="Portfolio Dawid Bujnowicz — fotografia i projekty web" />
+  <link rel="stylesheet" href="projekt.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">DB<span class="dot">.</span></a>
+      <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="Otwórz menu">
+        <span class="hamburger"></span>
+      </button>
+      <nav id="primary-nav" class="primary-nav">
+        <ul>
+          <li><a href="index.html" class="active">Start</a></li>
+          <li><a href="about.html">O mnie</a></li>
+          <li><a href="projects.html">Projekty</a></li>
+          <li><a href="contact.html">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <h1>Tworzę zdjęcia i proste, eleganckie strony internetowe.</h1>
+        <p>Portfolio fotograficzne i próby front-end — sprawdź projekty lub napisz do mnie.</p>
+        <p><a class="btn" href="projects.html">Zobacz projekty</a></p>
+      </div>
+    </section>
+
+    <section class="intro container">
+      <article>
+        <h2>O mnie w skrócie</h2>
+        <p>Cześć — mam na imię Dawid. Łączę pasję fotografii z tworzeniem stron. Pracuję głównie w HTML5, CSS3 i JavaScript.</p>
+      </article>
+    </section>
+
+    <section class="projects-preview container">
+      <h2>Wybrane projekty</h2>
+      <div class="grid">
+        <article class="card">
+          <img src="images.jpg" alt="Projekt 1 — miniatura" />
+          <h3>Sesja miejska</h3>
+          <p>Krótki opis projektu fotograficznego.</p>
+        </article>
+        <article class="card">
+          <img src="oshee-isotonic-drink-witaminy-i-mineraly-750ml-zestaw-6-sztuk.webp" alt="Projekt 2 — miniatura" />
+          <h3>Strona produktowa</h3>
+          <p>Landing page dla fikcyjnego produktu.</p>
+        </article>
+        <article class="card">
+          <img src="il_570xN.4260125177_bk6k.webp" alt="Projekt 3 — miniatura" />
+          <h3>Blog zdjęciowy</h3>
+          <p>Seria wpisów o technikach fotograficznych.</p>
+        </article>
+      </div>
+      <p class="center"><a class="btn ghost" href="projects.html">Wszystkie projekty →</a></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2025 Dawid Bujnowicz — Wszystkie prawa zastrzeżone</p>
+      <nav class="footer-nav">
+        <a href="index.html">Start</a> · <a href="about.html">O mnie</a> · <a href="projects.html">Projekty</a> · <a href="contact.html">Kontakt</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- KONIEC treści BODY -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ===== MENU HAMBURGER =====
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.primary-nav');
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      const opened = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', opened);
+    });
+
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', false);
+        }
+      });
+    });
+  }
+
+  // ===== FORMULARZ KONTAKTOWY =====
+  const form = document.getElementById('contactForm');
+  const msgBox = document.getElementById('formMessage');
+
+  if (form && msgBox) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+
+      if (!name || name.length < 2) return showMsg('Podaj poprawne imię (min 2 znaki)', true);
+      if (!email || !/^\S+@\S+\.\S+$/.test(email)) return showMsg('Podaj poprawny email', true);
+      if (!message || message.length < 10) return showMsg('Wiadomość min 10 znaków', true);
+
+      const submissions = JSON.parse(localStorage.getItem('submissions') || '[]');
+      submissions.push({name, email, message, date: new Date().toISOString()});
+      localStorage.setItem('submissions', JSON.stringify(submissions));
+
+      form.reset();
+      showMsg('Wysłano wiadomość (demo, zapisane lokalnie).', false);
+    });
+
+    function showMsg(text, isError) {
+      msgBox.textContent = text;
+      msgBox.style.color = isError ? '#ff6b6b' : '#a8ffbf';
+      setTimeout(() => { msgBox.textContent = ''; }, 5000);
+    }
+  }
+
+  // ===== ANIMACJA REVEAL =====
+  const reveals = document.querySelectorAll('.reveal');
+  if (reveals.length) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.15 });
+
+    reveals.forEach(el => observer.observe(el));
+  }
+
+});
+</script>
+</body>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Demo Strona — Hamburger + Formularz</title>
+  <style>
+    :root{--bg:#0f1724;--muted:#9aa4b2;--accent:#8ab4ff}
+    body{font-family:system-ui,Arial;color:#e6eef8;background:linear-gradient(#071025,#0f1724);margin:0;padding:1rem}
+    .container{max-width:900px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .logo{color:var(--accent);font-weight:700;text-decoration:none}
+    .nav-toggle{display:none;background:none;border:0;padding:0.4rem;cursor:pointer}
+    .hamburger, .hamburger::before, .hamburger::after{display:block;height:2px;background:#cbd5e1;width:22px;border-radius:2px;position:relative}
+    .hamburger::before{content:"";position:absolute;left:0;top:-7px}
+    .hamburger::after{content:"";position:absolute;left:0;top:7px}
+    nav ul{display:flex;gap:1rem;list-style:none;padding:0;margin:0}
+    nav a{color:var(--muted);text-decoration:none;padding:.4rem .6rem;border-radius:6px}
+    nav a:hover{background:rgba(255,255,255,0.03);color:#fff}
+    @media(max-width:720px){
+      .nav-toggle{display:block}
+      nav{position:fixed;right:0;top:64px;background:#071125;width:260px;height:calc(100vh - 64px);transform:translateX(100%);transition:transform .25s;padding:1rem}
+      nav.open{transform:translateX(0)}
+      nav ul{flex-direction:column;gap:.5rem}
+    }
+    .hero{margin:1.25rem 0;padding:1.25rem;border-radius:12px;background:rgba(255,255,255,0.02)}
+    .grid{display:grid;grid-template-columns:1fr;gap:1rem}
+    .card{background:rgba(255,255,255,0.02);padding:1rem;border-radius:10px}
+    form{display:flex;flex-direction:column;gap:.5rem;max-width:600px}
+    input,textarea{padding:.6rem;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    button{padding:.6rem 1rem;border-radius:8px;border:0;background:var(--accent);color:#03121e;cursor:pointer}
+    .msg{min-height:1.4rem;color:#a8ffbf}
+    /* Reveal animation */
+    .reveal{opacity:0;transform:translateY(30px);transition:all 0.6s ease}
+    .reveal.active{opacity:1;transform:translateY(0)}
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <a class="logo" href="#">MojeDemo</a>
+    <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="Otwórz menu">
+      <span class="hamburger"></span>
+    </button>
+    <nav id="primary-nav" class="primary-nav">
+      <ul>
+        <li><a href="#home">Start</a></li>
+        <li><a href="#about">O mnie</a></li>
+        <li><a href="#projects">Projekty</a></li>
+        <li><a href="#contact">Kontakt</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="hero reveal">
+      <h1>Test działania skryptu</h1>
+      <p>Menu hamburger + formularz z walidacją + animacje.</p>
+    </section>
+
+    <section id="projects" class="grid reveal">
+      <div class="card">Przykładowy projekt 1</div>
+      <div class="card">Przykładowy projekt 2</div>
+    </section>
+
+    <section id="contact" class="reveal" style="margin-top:1rem">
+      <h2>Kontakt — formularz</h2>
+      <form id="contactForm" novalidate>
+        <label for="name">Imię</label>
+        <input id="name" name="name" type="text" required minlength="2" />
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" required />
+        <label for="message">Wiadomość</label>
+        <textarea id="message" name="message" rows="5" required minlength="10"></textarea>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <button type="submit">Wyślij</button>
+          <div class="msg" id="formMessage" aria-live="polite"></div>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ===== MENU HAMBURGER =====
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.primary-nav');
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      const opened = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', opened);
+    });
+
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', false);
+        }
+      });
+    });
+  }
+
+  // ===== FORMULARZ KONTAKTOWY =====
+  const form = document.getElementById('contactForm');
+  const msgBox = document.getElementById('formMessage');
+
+  if (form && msgBox) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+
+      if (!name || name.length < 2) return showMsg('Podaj poprawne imię (min 2 znaki)', true);
+      if (!email || !/^\S+@\S+\.\S+$/.test(email)) return showMsg('Podaj poprawny email', true);
+      if (!message || message.length < 10) return showMsg('Wiadomość min 10 znaków', true);
+
+      const submissions = JSON.parse(localStorage.getItem('submissions') || '[]');
+      submissions.push({name, email, message, date: new Date().toISOString()});
+      localStorage.setItem('submissions', JSON.stringify(submissions));
+
+      form.reset();
+      showMsg('Wysłano wiadomość (demo, zapisane lokalnie).', false);
+    });
+
+    function showMsg(text, isError) {
+      msgBox.textContent = text;
+      msgBox.style.color = isError ? '#ff6b6b' : '#a8ffbf';
+      setTimeout(() => { msgBox.textContent = ''; }, 5000);
+    }
+  }
+
+  // ===== ANIMACJA REVEAL =====
+  const reveals = document.querySelectorAll('.reveal');
+  if (reveals.length) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.15 });
+
+    reveals.forEach(el => observer.observe(el));
+  }
+
+});
+</script>
+</body>
+</html>
+
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Projekty — Dawid Bujnowicz</title>
+  <link rel="stylesheet" href="projekt.css" />
+</head>
+<body>
+  <!-- Header (kopiuj) -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">DB<span class="dot">.</span></a>
+      <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="Otwórz menu">
+        <span class="hamburger"></span>
+      </button>
+      <nav id="primary-nav" class="primary-nav">
+        <ul>
+          <li><a href="index.html">Start</a></li>
+          <li><a href="about.html">O mnie</a></li>
+          <li><a href="projects.html" class="active">Projekty</a></li>
+          <li><a href="contact.html">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Projekty</h1>
+    <p>Lista projektów / wpisów — kliknij, aby zobaczyć szczegóły.</p>
+    <div class="grid">
+    
+      <article class="project-tile">
+        <img src="oshee-isotonic-drink-witaminy-i-mineraly-750ml-zestaw-6-sztuk.webp" alt="Projekt 1"/>
+        <h3>Projekt A</h3>
+        <p>oshee.</p>
+      </article>
+
+      <article class="project-tile">
+        <img src="images.jpg" alt="Projekt 2"/>
+        <h3>Projekt B</h3>
+        <p>park.</p>
+      </article>
+
+      <article class="project-tile">
+        <img src="il_570xN.4260125177_bk6k.webp" alt="Projekt 3"/>
+        <h3>Projekt C</h3>
+        <p>zdjecia.</p>
+      </article>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2025 Dawid Bujnowicz</p>
+      <nav class="footer-nav">
+        <a href="index.html">Start</a> · <a href="about.html">O mnie</a> · <a href="projects.html">Projekty</a> · <a href="contact.html">Kontakt</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- KONIEC treści BODY -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ===== MENU HAMBURGER =====
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.primary-nav');
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      const opened = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', opened);
+    });
+
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', false);
+        }
+      });
+    });
+  }
+
+  // ===== FORMULARZ KONTAKTOWY =====
+  const form = document.getElementById('contactForm');
+  const msgBox = document.getElementById('formMessage');
+
+  if (form && msgBox) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+
+      if (!name || name.length < 2) return showMsg('Podaj poprawne imię (min 2 znaki)', true);
+      if (!email || !/^\S+@\S+\.\S+$/.test(email)) return showMsg('Podaj poprawny email', true);
+      if (!message || message.length < 10) return showMsg('Wiadomość min 10 znaków', true);
+
+      const submissions = JSON.parse(localStorage.getItem('submissions') || '[]');
+      submissions.push({name, email, message, date: new Date().toISOString()});
+      localStorage.setItem('submissions', JSON.stringify(submissions));
+
+      form.reset();
+      showMsg('Wysłano wiadomość (demo, zapisane lokalnie).', false);
+    });
+
+    function showMsg(text, isError) {
+      msgBox.textContent = text;
+      msgBox.style.color = isError ? '#ff6b6b' : '#a8ffbf';
+      setTimeout(() => { msgBox.textContent = ''; }, 5000);
+    }
+  }
+
+  // ===== ANIMACJA REVEAL =====
+  const reveals = document.querySelectorAll('.reveal');
+  if (reveals.length) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.15 });
+
+    reveals.forEach(el => observer.observe(el));
+  }
+
+});
+</script>
+</body>
+
+</body>
+</html>
+
+:root{
+  --bg: #0f1724;
+  --card: #0b1220;
+  --muted: #9aa4b2;
+  --accent: #8ab4ff;
+  --glass: rgba(255,255,255,0.04);
+  --radius: 12px;
+  --max-width: 1100px;
+  --ff: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:var(--ff);
+  background:linear-gradient(180deg,#071025 0%, #0f1724 100%);
+  color:#e6eef8;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.container{max-width:var(--max-width);margin:0 auto;padding:1.25rem}
+
+/* Header */
+.site-header{background:transparent;position:sticky;top:0;z-index:50;padding:0.5rem 0}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.logo{font-weight:700;font-size:1.25rem;color:var(--accent);text-decoration:none}
+.logo .dot{color:#ffd166}
+
+/* Nav */
+.primary-nav ul{display:flex;gap:1rem;list-style:none;margin:0;padding:0}
+.primary-nav a{color:var(--muted);text-decoration:none;padding:0.4rem 0.6rem;border-radius:8px}
+.primary-nav a.active, .primary-nav a:hover{color:#fff;background:var(--glass)}
+
+/* Hamburger */
+.nav-toggle{display:none;background:none;border:0}
+.hamburger{display:block;width:22px;height:2px;background:var(--muted);position:relative}
+.hamburger::before,.hamburger::after{content:"";position:absolute;left:0;width:22px;height:2px;background:var(--muted)}
+.hamburger::before{top:-7px}
+.hamburger::after{top:7px}
+
+/* Hero */
+.hero{padding:4rem 0;background:linear-gradient(90deg, rgba(138,180,255,0.06), transparent 60%);border-radius:20px;margin:1rem 0}
+.hero-inner{display:flex;flex-direction:column;gap:.75rem}
+.hero h1{margin:0;font-size:clamp(1.5rem,3.5vw,2.5rem)}
+.btn{display:inline-block;background:var(--accent);color:#081122;padding:.6rem 1rem;border-radius:10px;text-decoration:none;font-weight:600}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+
+/* Grid / cards */
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card, .project-tile{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:1rem;border-radius:12px;backdrop-filter: blur(4px)}
+.card img, .project-tile img{width:100%;height:150px;object-fit:cover;border-radius:8px}
+
+/* Footer */
+.site-footer{margin-top:2rem;padding:1.25rem 0;border-top:1px solid rgba(255,255,255,0.03)}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.footer-nav a{color:var(--muted);text-decoration:none}
+
+/* Contact form */
+.contact-form{max-width:700px;background:transparent;padding:1rem;border-radius:12px;display:flex;flex-direction:column;gap:.6rem}
+.contact-form label{font-weight:600;color:var(--muted)}
+.contact-form input, .contact-form textarea{padding:.6rem;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;outline:none}
+.form-actions{text-align:right}
+.form-message{margin-top:.5rem;color:var(--muted)}
+
+/* Utilities */
+.center{text-align:center}
+.skills{display:flex;gap:.5rem;flex-wrap:wrap;list-style:none;padding:0}
+
+/* Responsive */
+@media (max-width:900px){
+  .primary-nav{position:fixed;top:64px;right:0;background:linear-gradient(180deg, rgba(7,16,37,0.98), rgba(6,12,22,0.98));width:240px;height:calc(100vh - 64px);transform:translateX(100%);transition:transform .28s;padding:1rem;border-left:1px solid rgba(255,255,255,0.03)}
+  .primary-nav.open{transform:translateX(0)}
+  .primary-nav ul{flex-direction:column}
+  .nav-toggle{display:block}
+}
+
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>O mnie — Jan Kowalski</title>
+  <link rel="stylesheet" href="projekt.css" />
+</head>
+<body>
+  
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">DB<span class="dot">.</span></a>
+      <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="Otwórz menu">
+        <span class="hamburger"></span>
+      </button>
+      <nav id="primary-nav" class="primary-nav">
+        <ul>
+          <li><a href="index.html">Start</a></li>
+          <li><a href="about.html" class="active">O mnie</a></li>
+          <li><a href="projects.html">Projekty</a></li>
+          <li><a href="contact.html">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section>
+      <h1>O mnie</h1>
+      <p>Jestem ambitny, mam dodoswiadczenie w tworzeniu stron.</p>
+      <h2>Umiejętności</h2>
+      <ul class="skills">
+        <li>HTML5</li>
+        <li>CSS3 (Flexbox, Grid)</li>
+        <li>JavaScript (ES6+)</li>
+        <li>Responsywne projektowanie</li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- Footer: jak w index.html -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2025 Dawid Bujnowicz</p>
+      <nav class="footer-nav">
+        <a href="index.html">Start</a> · <a href="about.html">O mnie</a> · <a href="projects.html">Projekty</a> · <a href="contact.html">Kontakt</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- KONIEC treści BODY -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ===== MENU HAMBURGER =====
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.primary-nav');
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      const opened = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', opened);
+    });
+
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', false);
+        }
+      });
+    });
+  }
+
+  // ===== FORMULARZ KONTAKTOWY =====
+  const form = document.getElementById('contactForm');
+  const msgBox = document.getElementById('formMessage');
+
+  if (form && msgBox) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+
+      if (!name || name.length < 2) return showMsg('Podaj poprawne imię (min 2 znaki)', true);
+      if (!email || !/^\S+@\S+\.\S+$/.test(email)) return showMsg('Podaj poprawny email', true);
+      if (!message || message.length < 10) return showMsg('Wiadomość min 10 znaków', true);
+
+      const submissions = JSON.parse(localStorage.getItem('submissions') || '[]');
+      submissions.push({name, email, message, date: new Date().toISOString()});
+      localStorage.setItem('submissions', JSON.stringify(submissions));
+
+      form.reset();
+      showMsg('Wysłano wiadomość (demo, zapisane lokalnie).', false);
+    });
+
+    function showMsg(text, isError) {
+      msgBox.textContent = text;
+      msgBox.style.color = isError ? '#ff6b6b' : '#a8ffbf';
+      setTimeout(() => { msgBox.textContent = ''; }, 5000);
+    }
+  }
+
+  // ===== ANIMACJA REVEAL =====
+  const reveals = document.querySelectorAll('.reveal');
+  if (reveals.length) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.15 });
+
+    reveals.forEach(el => observer.observe(el));
+  }
+
+});
+</script>
+</body>
+
+</body>
+</html>
+
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kontakt — Dawid Bujnowicz</title>
+  <link rel="stylesheet" href="projekt.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">DB<span class="dot">.</span></a>
+      <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="Otwórz menu">
+        <span class="hamburger"></span>
+      </button>
+      <nav id="primary-nav" class="primary-nav">
+        <ul>
+          <li><a href="index.html">Start</a></li>
+          <li><a href="about.html">O mnie</a></li>
+          <li><a href="projects.html">Projekty</a></li>
+          <li><a href="contact.html" class="active">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Kontakt</h1>
+    <p>Masz pytanie? Wypełnij formularz — to przykład formularza z walidacją po stronie klienta.</p>
+
+    <form id="contactForm" class="contact-form" novalidate>
+      <label for="name">Imię i nazwisko</label>
+      <input id="name" name="name" type="text" required minlength="2" />
+
+      <label for="email">Adres e-mail</label>
+      <input id="email" name="email" type="email" required />
+
+      <label for="message">Wiadomość</label>
+      <textarea id="message" name="message" rows="6" required minlength="10"></textarea>
+
+      <div class="form-actions">
+        <button type="submit" class="btn">Wyślij</button>
+      </div>
+
+      <div id="formMessage" class="form-message" aria-live="polite"></div>
+    </form>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2025 Dawid Bujnowicz</p>
+      <nav class="footer-nav">
+        <a href="index.html">Start</a> · <a href="about.html">O mnie</a> · <a href="projects.html">Projekty</a> · <a href="contact.html">Kontakt</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- KONIEC treści BODY -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ===== MENU HAMBURGER =====
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.primary-nav');
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      const opened = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', opened);
+    });
+
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', false);
+        }
+      });
+    });
+  }
+
+  // ===== FORMULARZ KONTAKTOWY =====
+  const form = document.getElementById('contactForm');
+  const msgBox = document.getElementById('formMessage');
+
+  if (form && msgBox) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+
+      if (!name || name.length < 2) return showMsg('Podaj poprawne imię (min 2 znaki)', true);
+      if (!email || !/^\S+@\S+\.\S+$/.test(email)) return showMsg('Podaj poprawny email', true);
+      if (!message || message.length < 10) return showMsg('Wiadomość min 10 znaków', true);
+
+      const submissions = JSON.parse(localStorage.getItem('submissions') || '[]');
+      submissions.push({name, email, message, date: new Date().toISOString()});
+      localStorage.setItem('submissions', JSON.stringify(submissions));
+
+      form.reset();
+      showMsg('Wysłano wiadomość (demo, zapisane lokalnie).', false);
+    });
+
+    function showMsg(text, isError) {
+      msgBox.textContent = text;
+      msgBox.style.color = isError ? '#ff6b6b' : '#a8ffbf';
+      setTimeout(() => { msgBox.textContent = ''; }, 5000);
+    }
+  }
+
+  // ===== ANIMACJA REVEAL =====
+  const reveals = document.querySelectorAll('.reveal');
+  if (reveals.length) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.15 });
+
+    reveals.forEach(el => observer.observe(el));
+  }
+
+});
+</script>
+</body>
+
+</body>
+</html>
