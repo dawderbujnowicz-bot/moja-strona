@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Moje Portfolio — Dawid Bujnowicz</title>
+  <meta name="description" content="Portfolio Dawid Bujnowicz — fotografia i projekty web" />
+  <link rel="stylesheet" href="projekt.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html">DB<span class="dot">.</span></a>
+      <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false" aria-label="Otwórz menu">
+        <span class="hamburger"></span>
+      </button>
+      <nav id="primary-nav" class="primary-nav">
+        <ul>
+          <li><a href="index.html" class="active">Start</a></li>
+          <li><a href="about.html">O mnie</a></li>
+          <li><a href="projects.html">Projekty</a></li>
+          <li><a href="contact.html">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <h1>Tworzę zdjęcia i proste, eleganckie strony internetowe.</h1>
+        <p>Portfolio fotograficzne i próby front-end — sprawdź projekty lub napisz do mnie.</p>
+        <p><a class="btn" href="projects.html">Zobacz projekty</a></p>
+      </div>
+    </section>
+
+    <section class="intro container">
+      <article>
+        <h2>O mnie w skrócie</h2>
+        <p>Cześć — mam na imię Dawid. Łączę pasję fotografii z tworzeniem stron. Pracuję głównie w HTML5, CSS3 i JavaScript.</p>
+      </article>
+    </section>
+
+    <section class="projects-preview container">
+      <h2>Wybrane projekty</h2>
+      <div class="grid">
+        <article class="card">
+          <img src="images.jpg" alt="Projekt 1 — miniatura" />
+          <h3>Sesja miejska</h3>
+          <p>Krótki opis projektu fotograficznego.</p>
+        </article>
+        <article class="card">
+          <img src="oshee-isotonic-drink-witaminy-i-mineraly-750ml-zestaw-6-sztuk.webp" alt="Projekt 2 — miniatura" />
+          <h3>Strona produktowa</h3>
+          <p>Landing page dla fikcyjnego produktu.</p>
+        </article>
+        <article class="card">
+          <img src="il_570xN.4260125177_bk6k.webp" alt="Projekt 3 — miniatura" />
+          <h3>Blog zdjęciowy</h3>
+          <p>Seria wpisów o technikach fotograficznych.</p>
+        </article>
+      </div>
+      <p class="center"><a class="btn ghost" href="projects.html">Wszystkie projekty →</a></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2025 Dawid Bujnowicz — Wszystkie prawa zastrzeżone</p>
+      <nav class="footer-nav">
+        <a href="index.html">Start</a> · <a href="about.html">O mnie</a> · <a href="projects.html">Projekty</a> · <a href="contact.html">Kontakt</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- KONIEC treści BODY -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ===== MENU HAMBURGER =====
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.primary-nav');
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      const opened = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', opened);
+    });
+
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (nav.classList.contains('open')) {
+          nav.classList.remove('open');
+          toggle.setAttribute('aria-expanded', false);
+        }
+      });
+    });
+  }
+
+  // ===== FORMULARZ KONTAKTOWY =====
+  const form = document.getElementById('contactForm');
+  const msgBox = document.getElementById('formMessage');
+
+  if (form && msgBox) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+
+      if (!name || name.length < 2) return showMsg('Podaj poprawne imię (min 2 znaki)', true);
+      if (!email || !/^\S+@\S+\.\S+$/.test(email)) return showMsg('Podaj poprawny email', true);
+      if (!message || message.length < 10) return showMsg('Wiadomość min 10 znaków', true);
+
+      const submissions = JSON.parse(localStorage.getItem('submissions') || '[]');
+      submissions.push({name, email, message, date: new Date().toISOString()});
+      localStorage.setItem('submissions', JSON.stringify(submissions));
+
+      form.reset();
+      showMsg('Wysłano wiadomość (demo, zapisane lokalnie).', false);
+    });
+
+    function showMsg(text, isError) {
+      msgBox.textContent = text;
+      msgBox.style.color = isError ? '#ff6b6b' : '#a8ffbf';
+      setTimeout(() => { msgBox.textContent = ''; }, 5000);
+    }
+  }
+
+  // ===== ANIMACJA REVEAL =====
+  const reveals = document.querySelectorAll('.reveal');
+  if (reveals.length) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.15 });
+
+    reveals.forEach(el => observer.observe(el));
+  }
+
+});
+</script>
+</body>
+
+</body>
+</html>
